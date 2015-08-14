@@ -4,105 +4,23 @@
   <meta http-equiv="Content-Script-Type" content="text/javascript">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
   <script>
-  var Feed = (function() {
 
-    var Feed = function(options) {
-        // URL for RSS
-        this.url = '';
-        //Mask element
-        this.maskEl = "#mask";
-        //Error message element
-        this.errorEl = "#error-message";
-        //List container
-        this.listEl = "#feed-list";
-        if (options) {
-            $.extend(this, options);
+  var feedUrl = "http://api.tumblr.com/v2/blog/spa-of-the-day.tumblr.com/posts?api_key=p4pZuS8QWJ5TTQAJAhxf6ZBFyAZ12m8lywb69hPVIv5Nrj19cV&tag=spaoftheday&limit=1";
+
+  $.ajax({
+      url: feedUrl,
+      dataType: 'jsonp',
+      success: function(data){
+        var imgNumber = data.response.posts[0].photos.length;
+        var images;
+        for(var i=0; i<imgNumber; i++){
+          images += data.response.posts[0].photos[i].
         }
-        this.addClickHandler();
-    };
-
-    /**
-     * Fetch RSS and display the contents of it
-     */
-    Feed.prototype.load = function() {
-        var self = this;
-
-        $(this.maskEl).show();
-        $(this.errorEl).text('');
-
-        $.ajax({
-            url: this.url,
-            dataType: 'text',
-            crossDomain: true,
-            success: function(data) {
-                data = $.parseXML(data.trim());
-
-                $(self.listEl).empty();
-
-                // Display RSS contents
-                var $rss = $(data);
-                $rss.find('item').each(function() {
-                    var item = this;
-                    $(self.listEl).append(self.createListElement(item));
-                });
-            },
-            error: function() {
-                $(self.errorEl).text('Failed to load RSS.');
-            },
-            complete: function() {
-                $(self.maskEl).hide();
-            }
-        });
-    };
-
-    Feed.prototype.addClickHandler = function() {
-        $(this.listEl).on('click', 'li', function() {
-            var url = $(this).data('link');
-
-            if (/^http/.test(url)) {
-                var ref = window.open(url, '_blank', 'location=yes');
-                ref.addEventListener("exit", function() {});
-            } else {
-                alert('Invalid URL.');
-            }
-        });
-    };
-
-    /**
-     * Create list element
-     * @param Array item
-     * @returns DOMElement
-     */
-    Feed.prototype.createListElement = function(item) {
-        var $item = $(item);
-
-        var link = this.escape($item.find('link').text());
-        var title = this.escape($item.find('title').text());
-        var description = this.escape(strip_tags($item.find('description').text()));
-        var date = new Date($item.find('pubDate').text());
-
-        return '<li class="feed-item" data-link="' + link + '">' +
-            '<time>' + date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate() + '</time>' +
-            '<h2>' + title + '</h2><p>' + description + '</p></li>';
-    };
-
-    Feed.prototype.escape = function(string) {
-        return htmlspecialchars(string, 'ENT_QUOTES');
-    };
-
-    return Feed;
-})();
-
-  var feedUrl = "http://spa-of-the-day.tumblr.com/tagged/spaoftheday/rss";
-
-  $(function() {
-      var feed = new Feed({
-          url: feedUrl
-      });
-      feed.load();
+      }
   });
-  console.log(feed);
   </script>
 </head>
 <body>
+  <div class="image"></div>
+  <div class="caption"></div>
 </body></html>
