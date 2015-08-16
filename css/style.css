@@ -28,12 +28,19 @@ h1{
  border: solid 3px #fff;
  box-shadow: 3px 3px 3px #bbb;
  box-sizing: border-box;
+ clear: both;
 }
 
 .date{
   font-size: 90%;
-  text-align: right;
-  margin: 0 15px 15px 0;
+  text-align: left;
+  float: right;
+  margin: 15px 0;
+  padding: 5px 20px;
+  width: 7em;
+  background-color: rgba(230, 10, 10, 0.6);
+  color: #fff;
+  box-shadow: 2px 2px 2px #bbb;
   font-family: 'Homemade Apple', cursive;
 }
 
@@ -43,7 +50,8 @@ h1{
 
 .caption{
   padding: 10px 25px;
-  background-color: rgba(255, 255, 255, 0.3);
+  background-color: rgba(255, 255, 255, 0.2);
+  box-shadow: 1px 1px 1px #bbb;
 }
 
 .caption a{
