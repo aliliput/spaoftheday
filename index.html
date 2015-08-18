@@ -2,6 +2,7 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="Content-Script-Type" content="text/javascript">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=yes">
   <title>Spa of the Day</title>
   <link rel="stylesheet" type="text/css" href="css/style.css">
   <link href='http://fonts.googleapis.com/css?family=Homemade+Apple' rel='stylesheet' type='text/css'>
@@ -21,9 +22,10 @@
            n = 0;
         }
         var Caption = data.response.posts[n].caption;
-        var Permalink = '<a href="' + data.response.posts[n].post_url + ' target="_blank">Read more</a>';
+        var Permalink = '<a href="' + data.response.posts[n].post_url + '" target="_blank"><img src="css/icon-out.png" alt="See on browser" /></a>';
+        var reload =
         $('.caption').html(Caption);
-        $('.nav').html(Permalink);
+        $('#url').html(Permalink);
 
         var imgNumber = data.response.posts[n].photos.length;
         var images = [];
@@ -57,5 +59,14 @@
   <div class="date"></div>
   <div class="image"></div>
   <div class="caption"></div>
-  <div class="nav"></div>
+  <div class="nav">
+    <div id="url"></div>
+    <div><input type="image" id="hoge" src="css/icon-reload.png" alt="See more Photo" /></div>
+    <div><input type="image" id="share" src="css/icon-share.png" alt="Share this" /></div>
+  </div>
+  <script>
+  $('#hoge').click(function(){
+    location.reload();
+  });
+  </script>
 </body></html>
