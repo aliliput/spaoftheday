@@ -1,18 +1,20 @@
+<!DOCTYPE HTML>
 <html>
 <head>
   <meta charset="utf-8">
   <meta http-equiv="Content-Script-Type" content="text/javascript">
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=yes">
   <title>Spa of the Day</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <script src="cordova-1.7.0.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
   <link rel="stylesheet" type="text/css" href="css/style.css">
   <link href='http://fonts.googleapis.com/css?family=Homemade+Apple' rel='stylesheet' type='text/css'>
   <link href='http://fonts.googleapis.com/css?family=Merriweather' rel='stylesheet' type='text/css'>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
   <script>
-
   var feedUrl = "http://api.tumblr.com/v2/blog/spa-of-the-day.tumblr.com/posts?api_key=p4pZuS8QWJ5TTQAJAhxf6ZBFyAZ12m8lywb69hPVIv5Nrj19cV&tag=spaoftheday";
 
-  $.ajax({
+  $(function(){
+    $.ajax({
       url: feedUrl,
       dataType: 'jsonp',
       success: function(data){
@@ -22,10 +24,17 @@
            n = 0;
         }
         var Caption = data.response.posts[n].caption;
-        var Permalink = '<a href="' + data.response.posts[n].post_url + '" target="_blank"><img src="css/icon-out.png" alt="See on browser" /></a>';
-        var reload =
+        var Permalink = data.response.posts[n].post_url;
         $('.caption').html(Caption);
-        $('#url').html(Permalink);
+        var link = $('.caption').find('a').attr('href');
+        $('.caption').find('a').removeAttr('href');
+        $('.caption').find('a').click(function(){
+            window.open(link, '_system');
+        });
+        $('#url').click(function(){
+           window.open(Permalink, '_system');
+        });
+
 
         var imgNumber = data.response.posts[n].photos.length;
         var images = [];
@@ -34,6 +43,7 @@
           $('.image').append('<img src="' + images[i] + '" />');
         }
       }
+     });
   });
 
   $(function(){
@@ -50,23 +60,21 @@
     setInterval(function(){
       location.reload();
     }, 86400000);
+    $('#reload').click(function(){
+        location.reload();
+    });
   });
   </script>
 </head>
 <body>
-  <h1>Spa of the Day</h1>
+  <h1><img src="css/title.png" alt="Spa of the day" style="width:190px;"></h1>
   <p class="sub">Where do you want to go today?</p>
   <div class="date"></div>
   <div class="image"></div>
   <div class="caption"></div>
   <div class="nav">
-    <div id="url"></div>
-    <div><input type="image" id="hoge" src="css/icon-reload.png" alt="See more Photo" /></div>
+    <div><input type="image" id="url" src="css/icon-out.png" alt="See on Tumblr" /></div>
+    <div><input type="image" id="reload" src="css/icon-reload.png" alt="See more Photo" /></div>
     <div><input type="image" id="share" src="css/icon-share.png" alt="Share this" /></div>
   </div>
-  <script>
-  $('#hoge').click(function(){
-    location.reload();
-  });
-  </script>
 </body></html>
